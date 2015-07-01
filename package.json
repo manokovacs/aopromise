@@ -1,0 +1,37 @@
+{
+  "name": "aopromise",
+  "version": "0.1.0",
+  "description": "Node.js Aspect oriented programming toolkit for Promise-base apps",
+  "main": "lib/aopromise.js",
+  "scripts": {
+    "test": "test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://manokovacs@github.com/manokovacs/aopromise.git"
+  },
+  "keywords": [
+    "aop",
+    "promise",
+    "aspect",
+    "oriented",
+    "programming",
+    "node",
+    "nodejs"
+  ],
+  "author": "Mano Kovacs <manokovacs@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/manokovacs/aopromise/issues"
+  },
+  "homepage": "https://github.com/manokovacs/aopromise",
+  "dependencies": {
+    "bluebird": "^2.9.30",
+    "extend": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5",
+    "should": "^7.0.1",
+    "sinon": "^1.15.4"
+  }
+}
