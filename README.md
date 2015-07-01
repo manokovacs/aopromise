@@ -18,6 +18,12 @@ function addition(a, b){
 	console.log('adding', a, 'and', b);
 	return a+b;
 }
+
+// wrapping function with aspect
+var loggedAdder = aop(addition, new BeforeAfterLoggerAspect('AdditionFunction'));
+// calling wrapped function
+loggedAdder(3, 4);
+
 ```
 outputs
 
