@@ -10,7 +10,7 @@ var MemoizeAspect = require('./aspects/MemoizeAspect');
 
 // quick start
 
-function BeforeAfterLoggerAspect(funcName){
+function BeforeAfterLoggerAspect(funcName) {
 	return new AspectFrame(
 		function (preOpts) {
 			console.log(funcName, 'was called with', preOpts.args);
@@ -21,9 +21,9 @@ function BeforeAfterLoggerAspect(funcName){
 	);
 }
 
-function addition(a, b){
+function addition(a, b) {
 	console.log('adding', a, 'and', b);
-	return a+b;
+	return a + b;
 }
 
 // wrapping function with aspect

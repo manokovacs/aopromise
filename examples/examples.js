@@ -10,8 +10,8 @@ var MemoizeAspect = require('./aspects/MemoizeAspect');
 
 
 function myFunc(num) {
-	var obj = {some:'data'};
-	for(var i=0; i<num*100000; i++){ // relatively slow
+	var obj = {some: 'data'};
+	for (var i = 0; i < num * 100000; i++) { // relatively slow
 		JSON.parse(JSON.stringify(obj));
 	}
 	console.log('myFunc body executed ' + num);
@@ -32,7 +32,7 @@ Promise.resolve().then(function () {
 }).then(function () {
 	console.log('--- MEMOIZED ---');
 	return memoizedMyFunc(3).then(console.log)
-		.then(function(){
+		.then(function () {
 			return memoizedMyFunc(3).then(console.log)
 		});
 }).then(function () {
@@ -41,20 +41,20 @@ Promise.resolve().then(function () {
 }).then(function () {
 	console.log('--- LOGGED AND MEMOIZED---');
 	return loggedAndMemoizedMyFunc(5).then(console.log)
-		.then(function(){
+		.then(function () {
 			return loggedAndMemoizedMyFunc(5).then(console.log)
 		});
 }).then(function () {
 	console.log('--- MEMOIZED AND LOGGED ---');
 	return memoizedAndLoggedMyFunc(6).then(console.log)
-		.then(function(){
+		.then(function () {
 			return memoizedAndLoggedMyFunc(6).then(console.log)
 		});
 }).then(function () {
 	console.log('--- BENCHMARKED AND LOGGED AND MEMOIZED ---');
 	console.log('--- second execution should be faster   ---');
 	return benchmarkedAndloggedAndMemoizedMyFunc(7).then(console.log)
-		.then(function(){
+		.then(function () {
 			// should be much faster due to memorize
 			return benchmarkedAndloggedAndMemoizedMyFunc(7).then(console.log)
 		});

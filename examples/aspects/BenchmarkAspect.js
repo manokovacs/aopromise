@@ -2,14 +2,14 @@
 var AspectFrame = require('../../').AspectFrame;
 var Promise = require('bluebird');
 
-function BenchmarkAspect(){
+function BenchmarkAspect() {
 	return new AspectFrame(
-		function(){
+		function () {
 			return Promise.resolve({_startTime: process.hrtime()});
 		},
-		function(opts){
+		function (opts) {
 			var diff = process.hrtime(opts._startTime);
-			console.log('Futasido: ' + (diff[0] + diff[1]/1e9));
+			console.log('Futasido: ' + (diff[0] + diff[1] / 1e9));
 		}
 	);
 }

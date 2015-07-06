@@ -7,7 +7,7 @@ function MemoizeAspect(options) {
 	var promiseMemory = {};
 	return new AspectFrame(
 		function (preOpts) {
-			return Promise.resolve({newFunction: function(){
+			return Promise.resolve({newFunction: function () {
 				var hash = crypto.createHash('sha1').update(JSON.stringify(preOpts.args)).digest('hex');
 				if (typeof promiseMemory[hash] !== 'undefined') {
 					return promiseMemory[hash];
