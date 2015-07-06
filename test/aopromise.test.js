@@ -242,4 +242,31 @@ describe('Integration test of aopromise', function () {
 			});
 	});
 
+
+	it('calls async in order using Builder', function (end) {
+		var callLog = '';
+		var asyncMethodFactory = function (counter) {
+			return function () {
+				return new Promise(function (res, rej) {
+					setTimeout(function () {
+						callLog += counter;
+						res();
+					}, 1);
+				});
+			};
+		};
+		aop()
+			.aspect(new AspectFrame(asyncMethodFactory(1), asyncMethodFactory(5)))
+			.aspect(new AspectFrame(asyncMethodFactory(2), asyncMethodFactory(4)))
+			.fn(function () {
+				callLog += 3;
+			})()
+			.then(function () {
+				callLog.should.equal('12345');
+				end();
+			}).catch(end);
+
+
+	});
+
 });

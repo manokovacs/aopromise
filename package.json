@@ -1,6 +1,6 @@
 {
   "name": "aopromise",
-  "version": "0.1.0",
+	"version": "0.1.3",
   "description": "Node.js Aspect oriented programming toolkit for Promise-base apps",
   "main": "lib/aopromise.js",
   "scripts": {
