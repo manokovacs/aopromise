@@ -27,7 +27,8 @@ describe('AspectFrame', function () {
 		pre.calledOnce.should.be.true();
 		post.calledOnce.should.be.true();
 	});
+
 	it('should .pre() should always return promise', function () {
-		new AspectFrame(pre).pre().should.have.property('then');
+		new AspectFrame().pre().should.have.property('then');
 	});
 });
