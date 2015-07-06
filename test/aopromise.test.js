@@ -174,4 +174,72 @@ describe('Integration test of aopromise', function () {
 			});
 	});
 
+	it('propagates inner aspect error', function (end) {
+		var err = 'error';
+		var preOuter = sinon.spy();
+		var preInner = sinon.spy(function () {
+			return Promise.reject(err);
+		});
+		var func = sinon.spy();
+		var postInner = sinon.spy();
+		var postOuter = sinon.spy();
+		aop(func,
+			new AspectFrame(preOuter, postOuter),
+			new AspectFrame(preInner, postInner)
+		)()
+			.then(function () {
+				end(new Error('Execution should continue with catch'));
+			})
+			.catch(function (_err) {
+				err.should.equal(_err);
+				preOuter.calledOnce.should.be.true();
+				preInner.calledOnce.should.be.true();
+				func.called.should.be.false();
+				postInner.called.should.be.false();
+				postOuter.called.should.be.false();
+				end();
+			});
+	});
+
+	xit('lets outer aspect to clean up on error', function (end) {
+		var err = 'error';
+		var clean = true;
+		var preOuter = sinon.spy(function () {
+			clean = false;
+		});
+		var preInner = sinon.spy(function () {
+			return Promise.reject(err);
+		});
+		var func = sinon.spy();
+		var postInner = sinon.spy();
+		var postOuter = sinon.spy(function () {
+			Promise.resolve()
+				.catch(function (err) {
+					clean = true; // cleaning up
+					return Promise.reject(err);
+				});
+		});
+		aop(func,
+			new AspectFrame(preOuter, postOuter),
+			new AspectFrame(preInner, postInner)
+		)()
+			.then(function () {
+				end(new Error('Execution should continue with catch'));
+			})
+			.catch(function (_err) {
+				try {
+					err.should.equal(_err);
+					preOuter.calledOnce.should.be.true();
+					preInner.calledOnce.should.be.true();
+					func.called.should.be.false();
+					postInner.called.should.be.false();
+					postOuter.called.should.be.false();
+					clean.should.be.true();
+					end();
+				} catch (e) {
+					end(e);
+				}
+			});
+	});
+
 });
