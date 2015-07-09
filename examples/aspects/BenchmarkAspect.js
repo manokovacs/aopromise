@@ -9,7 +9,7 @@ function BenchmarkAspect() {
 		},
 		function (opts) {
 			var diff = process.hrtime(opts._startTime);
-			console.log('Futasido: ' + (diff[0] + diff[1] / 1e9));
+			console.log('Runtime: ' + (diff[0] + diff[1] / 1e9));
 		}
 	);
 }

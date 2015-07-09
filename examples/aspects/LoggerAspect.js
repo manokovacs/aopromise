@@ -6,10 +6,10 @@ module.exports = LoggerAspect;
 function LoggerAspect(options) {
 	return new AspectFrame(
 		function (preOpts) {
-			console.log('pre', options || '');
+			console.log(options || '', preOpts.originalFunction.name, 'was called with', preOpts.args);
 		},
 		function (postOpts) {
-			console.log('post', options || '');
+			console.log(options || '', postOpts.originalFunction.name, 'returned with', postOpts.result);
 		}
 	)
 }

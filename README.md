@@ -15,48 +15,98 @@ It is suitable for implementing
 
 Due to the asynchronous nature of many aspects, the library works only with synchronous functions or Promise-returning functions. 
 
+[Examples](https://github.com/manokovacs/aopromise/tree/master/examples)
+
 ## Quick start
 ```javascript
 var aop = require('aopromise');
 
-function BeforeAfterLoggerAspect(funcName){
+
+// Have your aspect registered once
+aop.register('logger', BeforeAfterLoggerAspect); // see definition below
+
+
+// take a sync or promise-returning function
+function addition(a, b) {
+	console.log('adding', a, 'and', b);
+	return a + b;
+}
+
+// Add you aspect using chaining
+var loggedAdder = aop()
+	.logger('AdditionFunction')
+	.fn(addition);
+
+
+
+// You may also use this syntax. The result is identical
+loggedAdder = aop(addition, new BeforeAfterLoggerAspect('AdditionFunction')); // aspect declared below
+
+
+// calling wrapped functions
+loggedAdder(3, 4);
+// outputs
+// AdditionFunction was called with [ 3, 4 ]
+// adding 3 and 4
+// AdditionFunction returned with 7
+
+
+/**
+ * Defining aspect. Using AspectFrame for factory.
+ */
+function BeforeAfterLoggerAspect(funcName) {
 	return new aop.AspectFrame(
 		function (preOpts) {
-			console.log(funcName, 'was called with', preOpts.args);
+			console.log(funcName || preOpts.originalFunction.name, 'was called with', preOpts.args);
 		},
 		function (postOpts) {
-			console.log(funcName, 'returned with', postOpts.result);
+			console.log(funcName || postOpts.originalFunction.name, 'returned with', postOpts.result);
 		}
 	);
 }
 
-function addition(a, b){
-	console.log('adding', a, 'and', b);
-	return a+b;
-}
-
-// wrapping function with aspect
-var loggedAdder = aop(addition, new BeforeAfterLoggerAspect('AdditionFunction'));
-// calling wrapped function
-loggedAdder(3, 4);
+```
+## API
+The aopromise API gives you API to register aspects and wrap functions with selected and configured aspects. To use
+chaining, first, you need to register the *constructor functions* of your aspects. They will be called with _new_ operator, when used.
 
 ```
-outputs
+javascript
+// sample aspects. They might be also available pretty soon
+aop.register('logger', LoggerAspect);
+aop.register('preauth', RoleBasedAuthorizerAspect);
+aop.register('memoize', MemoizeAspect);
+```
+A registered aspect is now can be used on the builder's interfaces. You can create a builder by invoking _aopromise_ without
+any arguments. When you finished adding aspects, call _fn(...)_ with your function as argument.
 
 ```
-AdditionFunction was called with [ 3, 4 ]
-adding 3 and 4
-AdditionFunction returned with 7
+javascript
+var getUserAop = aop()
+    .logger() // it will be logged
+    .preauth('ROLE_ADMIN') // function is preauthorized
+    .memoize() // caches the result for given argument
+    .fn(function getUser(userId){
+    // ...
+    });
+
+getUserAop(123).then(function(){/*...*/});
 ```
 
-## Creating aspects
+```
+javascript
+
+```
+
+## Aspects
 Aspects are orthogonal functionalities to your business logic. Boilerplates that are usually wrap your actually code. Your
 aspects may intercept the execution of the original function and apply custom logic, change arguments or the function itself.
 
+### Creating aspects
 An aspect consist of an optional pre() and post() function. You may define either or both (or none, but that would be just silly). 
 Pre and post functions of aspects must return promises, if defined, so chain execution would work.
 
-### AspectFrame
+#### AspectFrame
 For convenience, you can use AspectPack class to create aspects easily. AspectFrame makes is simpler to create aspect and
 make sure you don't forget to return a promise: it returns a resolved promise if you don't have any return value.
 ```javascript
@@ -84,7 +134,7 @@ function MyAspectWithPostOnly(){
 }
 ```
 
-## Accessing arguments and result
+### Accessing arguments and result
 Aspects receive contextual information about the exection. Pre methods receive the arguments, passed by invoker function.
  Post methods can additionally access the result. The example below demonstrate what properties the aspects may read at runtime.
 ```javascript
@@ -107,13 +157,13 @@ function BeforeAfterLoggerAspect(funcName){
 
 ```
 
-## Manipulating the function invocation
+### Manipulating the function invocation
 You may want to create aspects that affect the execution of the wrapped function. Aspects may
 * interrupt execution
 * replace arguments
 * replace executed function
  
-### Interrupt execution
+#### Interrupt execution
 Aspect's pre() function may decide to interrupt execution of the wrapped function. This might be useful when creating
 validation or authorization aspects.
 
@@ -152,7 +202,7 @@ numberOnlyFunc(1, 'oh-oh, not good, noooot good', 3).then(function () {
 
 ```
 
-### Replacing arguments
+#### Replacing arguments
 Aspect's pre() function may replace the arguments before the wrapped function is called by resolving the returned promise
 with a parameter object, having a _newArgs_ property.
 ```javascript
@@ -176,10 +226,10 @@ aop(
 
 ```
 
-### Replacing function
+#### Replacing function
 @TODO
 
-## Sharing data between _pre_ and _post_
+### Sharing data between _pre_ and _post_
 @TODO
 
 
