@@ -249,6 +249,7 @@ numberOnlyFunc(1, 'oh-oh, not good, noooot good', 3).then(function () {
 #### Replacing arguments
 Aspect's pre() function may replace the arguments before the wrapped function is called by resolving the returned promise
 with a parameter object, having a _newArgs_ property.
+
 ```javascript
 function AddExtraArgumentAspect(extraArgument) {
 	return new aop.AspectFrame(
@@ -261,12 +262,11 @@ function AddExtraArgumentAspect(extraArgument) {
 	);
 }
 
-aop(
-	function(){
-		console.log('function called with', arguments);
-	},
-	new AddExtraArgumentAspect('additionArgValue')
-)('normalArgument');
+aop()
+	.aspect(new AddExtraArgumentAspect('additionArgValue'))
+	.fn(function(){
+        		console.log('function called with', arguments);
+    })('normalArgument');
 
 ```
 
