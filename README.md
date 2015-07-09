@@ -271,7 +271,31 @@ aop(
 ```
 
 #### Replacing function
-@TODO
+You might need to prevent or replace the execution of the wrapped function if certain conditions are meet. A memoizer is
+an example, where you don't want to run the original function if the cache has a hit. The example above shows how you can
+replace the original function by returning an object with a _newFunction_ property in the resolved promise in the _pre_ function.
+You can also run the original function with the actual parameters easily by executing the _runner()_ method which wraps the 
+arguments for convenience.
+```javascript
+var crypto = require('crypto');
+
+function MemoizeAspect() {
+	var promiseMemory = {}; // you may want to use cache-server for this
+	return new AspectFrame(
+		function (preOpts) {
+			return Promise.resolve({newFunction: function () {
+				var hash = crypto.createHash('sha1').update(JSON.stringify(preOpts.args)).digest('hex'); // hash by the parameters
+				if (typeof promiseMemory[hash] !== 'undefined') { // hit?
+					return promiseMemory[hash];
+				} else {
+					// we are storing the promise as cached value, so no double calculation
+					return promiseMemory[hash] = preOpts.runner();
+				}
+			}});
+		}
+	)
+}
+```
 
 ### Sharing data between _pre_ and _post_
 @TODO

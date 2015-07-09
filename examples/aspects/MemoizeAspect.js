@@ -3,7 +3,7 @@ var Promise = require('bluebird');
 var AspectFrame = require('../../').AspectFrame;
 var crypto = require('crypto');
 
-function MemoizeAspect(options) {
+function MemoizeAspect() {
 	var promiseMemory = {};
 	return new AspectFrame(
 		function (preOpts) {
