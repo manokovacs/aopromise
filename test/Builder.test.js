@@ -5,6 +5,7 @@ var should = require('should');
 var aop = aopromise.wrap;
 var Builder = require('../lib/Builder');
 var AspectFrame = require('../lib/AspectFrame');
+var Promise = require('bluebird');
 
 describe('Builder', function () {
 	it('adds aspect to wrapper', function (end) {
@@ -68,5 +69,19 @@ describe('Builder', function () {
 		} catch (err) {
 			end();
 		}
+	});
+
+	it('should bind to _this_ if passed', function (end) {
+		var self = {xx: 2};
+		var fn = new Builder(function (fn) {
+			return Promise.method(fn);
+		}).fn(self, function () {
+			this.xx.should.equal(2);
+			return this.xx;
+		});
+		fn().then(function (_xx) {
+			_xx.should.equal(2);
+			end();
+		}).catch(end);
 	});
 });

@@ -98,6 +98,43 @@ javascript
 
 ```
 
+### Binding
+You may bind the function to an object by passing two parameter to _fn()_
+```
+javascript
+function UserService(){
+    this.getUser = aop()
+        .logger() // it will be logged
+        .preauth('ROLE_ADMIN') // function is preauthorized
+        .memoize() // caches the result for given argument
+        .fn(
+            this, // this reference
+            function getUser(userId){ // the function to bind
+            // ...
+            }
+        );
+}
+```
+
+### Alternatives
+Don't like chaining or registering? Neither do I! Use wrapper function, parameters and array instead! You don't need to register
+either!
+
+```
+javascript
+var getUserAop = aop.wrap(function getUser(userId){
+    // ...
+    } , new LoggerAspect(), new RoleBasedAuthorizerAspect(), new MemoizeAspect());
+```
+
+You could even pass the aspects in an array if you sick of the smugness of beneficial of variable parameter!
+```
+javascript
+var getUserAop = aop.wrap(function getUser(userId){/* ... */} , [new LoggerAspect(), new RoleBasedAuthorizerAspect(), new MemoizeAspect()]);
+```
+
+Regardless of the sarcasm, this might be useful if you want to have factories adding the aspects for you.
+
 ## Aspects
 Aspects are orthogonal functionalities to your business logic. Boilerplates that are usually wrap your actually code. Your
 aspects may intercept the execution of the original function and apply custom logic, change arguments or the function itself.
