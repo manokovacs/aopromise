@@ -66,6 +66,22 @@ function BeforeAfterLoggerAspect(funcName) {
 }
 
 ```
+
+### Ordering
+The functions are executed in the following order:
+1. pres
+2. wrapped function
+3. posts
+
+As you can see later, you can add *multiple aspects* to a function. The order of the _pre()_ functions
+is in the order how aspects were added. After the wrapped function executed, the _post()_ methods are
+called in *revers order*. So if a _logger_ and an _auth_ aspect is added, the pre and post function order is
+1. logger.pre
+2. auth.pre
+3. wrapped function
+4. auth.post
+5. logger.post
+
 ## API
 The aopromise API gives you API to register aspects and wrap functions with selected and configured aspects. To use
 chaining, first, you need to register the *constructor functions* of your aspects. They will be called with _new_ operator, when used.
