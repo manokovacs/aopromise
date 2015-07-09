@@ -298,6 +298,20 @@ function MemoizeAspect() {
 ```
 
 ### Sharing data between _pre_ and _post_
-@TODO
+
+```javascript
+function BenchmarkAspect() {
+	return new AspectFrame(
+		function () {
+			return Promise.resolve({_startTime: process.hrtime()}); // adding \_startTime to the scope of the execution 
+		},
+		function (opts) {
+			var diff = process.hrtime(opts._startTime); // we can access the \_startTime property here
+			console.log('Runtime: ' + (diff[0] + diff[1] / 1e9));
+		}
+	);
+}
+
+```
 
 
