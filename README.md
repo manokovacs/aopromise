@@ -70,8 +70,7 @@ function BeforeAfterLoggerAspect(funcName) {
 The aopromise API gives you API to register aspects and wrap functions with selected and configured aspects. To use
 chaining, first, you need to register the *constructor functions* of your aspects. They will be called with _new_ operator, when used.
 
-```
-javascript
+```javascript
 // sample aspects. They might be also available pretty soon
 aop.register('logger', LoggerAspect);
 aop.register('preauth', RoleBasedAuthorizerAspect);
@@ -80,8 +79,7 @@ aop.register('memoize', MemoizeAspect);
 A registered aspect is now can be used on the builder's interfaces. You can create a builder by invoking _aopromise_ without
 any arguments. When you finished adding aspects, call _fn(...)_ with your function as argument.
 
-```
-javascript
+```javascript
 var getUserAop = aop()
     .logger() // it will be logged
     .preauth('ROLE_ADMIN') // function is preauthorized
@@ -93,15 +91,10 @@ var getUserAop = aop()
 getUserAop(123).then(function(){/*...*/});
 ```
 
-```
-javascript
-
-```
 
 ### Binding
 You may bind the function to an object by passing two parameter to _fn()_
-```
-javascript
+```javascript
 function UserService(){
     this.getUser = aop()
         .logger() // it will be logged
@@ -120,16 +113,14 @@ function UserService(){
 Don't like chaining or registering? Neither do I! Use wrapper function, parameters and array instead! You don't need to register
 either!
 
-```
-javascript
+```javascript
 var getUserAop = aop.wrap(function getUser(userId){
     // ...
     } , new LoggerAspect(), new RoleBasedAuthorizerAspect(), new MemoizeAspect());
 ```
 
 You could even pass the aspects in an array if you sick of the smugness of beneficial of variable parameter!
-```
-javascript
+```javascript
 var getUserAop = aop.wrap(function getUser(userId){/* ... */} , [new LoggerAspect(), new RoleBasedAuthorizerAspect(), new MemoizeAspect()]);
 ```
 
