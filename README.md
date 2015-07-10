@@ -1,5 +1,5 @@
 # aopromise
-Node.js [Aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming) toolkit for *Promise-based* apps. 
+Node.js [Aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming) toolkit for **Promise-based** apps. 
 It adds a simplified framework where you need are just providing a prepended and an appended function and aopromise will 
 execute your aspects in the right order, exposing
 the necessary contextual information about the wrapped function. Aspects may read and manipulate arguments, prevent
