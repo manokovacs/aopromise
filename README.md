@@ -297,6 +297,25 @@ function MemoizeAspect() {
 }
 ```
 
+### Replacing result
+In some cases it is useful to replace the return value of the wrapped function. You may do that by returning _newResult_
+property in the _post()_ function of the aspect. The example below sets the default value of the functions result if it was originally
+_null_.
+
+```javascript
+function DefaultResultAspect(default) {
+	return new AspectFrame(
+		null, // no pre
+		function (opts) {
+			if(opts.result === null && !opts.hasOwnProperty('newResult')){
+			    return Promise.resolve({newResult: default});
+			}
+		}
+	);
+}
+
+```
+
 ### Sharing data between _pre_ and _post_
 
 ```javascript

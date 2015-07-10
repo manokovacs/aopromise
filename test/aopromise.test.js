@@ -243,7 +243,7 @@ describe('Integration test of aopromise', function () {
 	});
 
 
-	it('calls async in order using Builder', function (end) {
+	it('calls async aspects in order using Builder', function (end) {
 		var callLog = '';
 		var asyncMethodFactory = function (counter) {
 			return function () {
@@ -268,5 +268,22 @@ describe('Integration test of aopromise', function () {
 
 
 	});
+
+	it('should accept newResult for result from post method in aspect', function (end) {
+		var res = 123;
+		var newRes = 456;
+
+		aop(function () {
+			return res;
+		}, new AspectFrame(null, function () {
+			return Promise.resolve({newResult: newRes});
+		}))().then(function (result) {
+			result.should.equal(newRes);
+			end();
+		}).catch(end);
+
+	});
+
+
 
 });
