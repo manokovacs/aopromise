@@ -7,7 +7,7 @@ function execution, or even replace the function to be executed.
 It is suitable for implementing
 * invocation logger
 * pre-authorization
-* argumentum validator
+* argumentum validator [(see JSON Schema validator aspect)](https://www.npmjs.com/package/json-schema-aopromise)
 * memoize
 * benchmark
 * circuit-breaker
