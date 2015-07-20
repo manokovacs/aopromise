@@ -10,7 +10,7 @@ It is suitable for implementing
 * argumentum validator [(see JSON Schema validator aspect)](https://www.npmjs.com/package/json-schema-aopromise)
 * memoize
 * benchmark
-* circuit-breaker
+* circuit-breaker [(see Circuit-breaker aspect)](https://www.npmjs.com/package/circuit-breaker-aopromise)
 * timeout handler
 
 Due to the asynchronous nature of many aspects, the library works only with synchronous functions or Promise-returning functions. 
