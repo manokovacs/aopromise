@@ -201,11 +201,15 @@ describe('Integration test of aopromise', function () {
 			});
 	});
 
-	xit('lets outer aspect to clean up on error', function (end) {
+	it('lets outer aspect to clean up on error', function (end) {
 		var err = 'error';
 		var clean = true;
 		var preOuter = sinon.spy(function () {
 			clean = false;
+		});
+		var catchOuter = sinon.spy(function (err) {
+			clean = true;
+			return Promise.reject(err);
 		});
 		var preInner = sinon.spy(function () {
 			return Promise.reject(err);
@@ -220,7 +224,7 @@ describe('Integration test of aopromise', function () {
 				});
 		});
 		aop(func,
-			new AspectFrame(preOuter, postOuter),
+			new AspectFrame(preOuter, postOuter, catchOuter),
 			new AspectFrame(preInner, postInner)
 		)()
 			.then(function () {

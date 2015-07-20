@@ -6,7 +6,7 @@ var Pack = require('../lib/AspectPack');
 var Promise = require('bluebird');
 
 describe('Wrapper.wrap', function () {
-	it('should call pre and post with function and args on AspectPack', function (end) {
+	it('should call pre and post with function and args on AspectPack', function (done) {
 		var res = 'rezz';
 		var fn = sinon.spy(function () {
 			return res;
@@ -35,13 +35,13 @@ describe('Wrapper.wrap', function () {
 				fn.calledWith(arg1, arg2).should.be.true();
 				pack.pre.calledOnce.should.be.true();
 				pack.post.calledOnce.should.be.true();
-				end();
+				done();
 			})
-			.catch(end);
+			.catch(done);
 
 	});
 
-	it('should call post with originalArgs if args changed on AspectPack', function (end) {
+	it('should call post with originalArgs if args changed on AspectPack', function (done) {
 		var res = 'rezz';
 		var fn = sinon.spy(function () {
 			return res;
@@ -68,9 +68,9 @@ describe('Wrapper.wrap', function () {
 				fn.calledWith(arg1b, arg2b).should.be.true();
 				pack.pre.calledOnce.should.be.true();
 				pack.post.calledOnce.should.be.true();
-				end();
+				done();
 			})
-			.catch(end);
+			.catch(done);
 
 	});
 
@@ -91,7 +91,7 @@ describe('Wrapper.wrap', function () {
 
 	});
 
-	it('should use newFunction returned by AspectPack.init', function (end) {
+	it('should use newFunction returned by AspectPack.init', function (done) {
 		function someFunc() {
 		}
 
@@ -111,9 +111,25 @@ describe('Wrapper.wrap', function () {
 		wrapper.wrap(someFunc, pack)().then(function () {
 			pack.init.calledOnce.should.be.true();
 			pack.pre.calledOnce.should.be.true();
-			end();
-		}).catch(end);
+			done();
+		}).catch(done);
+	});
 
+	it('should add AspectPack.catch to catch of the wrapped fn', function (done) {
+		var pack = new Pack([]);
+		pack.catch = sinon.spy(function (err) {
+			return true;
+		});
+
+		wrapper.wrap(
+			function () {
+				return Promise.reject('errrr');
+			}
+			, pack
+		)().then(function () {
+			pack.catch.calledOnce.should.be.true();
+			done();
+		}).catch(done);
 
 	});
 });
