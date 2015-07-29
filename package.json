@@ -4,7 +4,7 @@
 	"description": "Node.js aspect oriented programming toolkit for Promise-based apps",
   "main": "lib/aopromise.js",
   "scripts": {
-    "test": "test/test.js"
+	  "test": "node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
