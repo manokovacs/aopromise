@@ -1,4 +1,8 @@
 # aopromise
+[![Build Status](https://secure.travis-ci.org/manokovacs/aopromise.svg?branch=master)](http://travis-ci.org/manokovacs/aopromise) 
+[![Dependency Status](https://gemnasium.com/manokovacs/aopromise.svg)](https://gemnasium.com/manokovacs/aopromise) 
+[![NPM version](https://badge.fury.io/js/aopromise.svg)](http://badge.fury.io/js/aopromise)
+
 Node.js [Aspect oriented programming](https://en.wikipedia.org/wiki/Aspect-oriented_programming) toolkit for **Promise-based** apps. 
 It adds a simplified framework where you need are just providing a prepended and an appended function and aopromise will 
 execute your aspects in the right order, exposing
@@ -16,6 +20,9 @@ It is suitable for implementing
 Due to the asynchronous nature of many aspects, the library works only with synchronous functions or Promise-returning functions. 
 
 [Examples](https://github.com/manokovacs/aopromise/tree/master/examples)
+
+## Installation
+[![aopromise](https://nodei.co/npm/aopromise.png?small=true)][npm]
 
 ## Quick start
 ```javascript
